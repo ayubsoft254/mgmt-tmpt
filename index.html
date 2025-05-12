@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.13/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for sidebar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Smooth transitions */
+        .sidebar-transition {
+            transition: width 0.3s ease, transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-base-200">
+    <!-- Mobile menu button -->
+    <div class="lg:hidden fixed top-4 left-4 z-50">
+        <button id="mobile-menu-btn" class="btn btn-circle btn-ghost bg-base-100 shadow-lg">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-base-100 shadow-xl z-40 transform -translate-x-full lg:translate-x-0 sidebar-transition">
+        <div class="flex flex-col h-full">
+            <!-- Sidebar Header -->
+            <div class="p-4 border-b border-base-300">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <i class="fas fa-cube text-primary"></i>
+                        <span>Dashboard</span>
+                    </h2>
+                    <button id="sidebar-toggle" class="btn btn-ghost btn-sm lg:hidden">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sidebar Content -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-4">
+                <ul class="menu menu-xs lg:menu-md">
+                    <!-- Dashboard Group -->
+                    <li>
+                        <details open>
+                            <summary class="font-semibold">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </summary>
+                            <ul>
+                                <li><a href="#overview"><i class="fas fa-chart-line"></i> Overview</a></li>
+                                <li><a href="#analytics"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                                <li><a href="#reports"><i class="fas fa-file-alt"></i> Reports</a></li>
+                            </ul>
+                        </details>
+                    </li>
+
+                    <!-- User Management Group -->
+                    <li>
+                        <details>
+                            <summary class="font-semibold">
+                                <i class="fas fa-users"></i>
+                                User Management
+                            </summary>
+                            <ul>
+                                <li><a href="#users"><i class="fas fa-user"></i> Users</a></li>
+                                <li><a href="#roles"><i class="fas fa-user-shield"></i> Roles</a></li>
+                                <li><a href="#permissions"><i class="fas fa-key"></i> Permissions</a></li>
+                            </ul>
+                        </details>
+                    </li>
+
+                    <!-- Content Group -->
+                    <li>
+                        <details>
+                            <summary class="font-semibold">
+                                <i class="fas fa-folder"></i>
+                                Content
+                            </summary>
+                            <ul>
+                                <li><a href="#posts"><i class="fas fa-file-alt"></i> Posts</a></li>
+                                <li><a href="#media"><i class="fas fa-image"></i> Media</a></li>
+                                <li><a href="#categories"><i class="fas fa-tags"></i> Categories</a></li>
+                            </ul>
+                        </details>
+                    </li>
+
+                    <!-- Settings Group -->
+                    <li>
+                        <details>
+                            <summary class="font-semibold">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </summary>
+                            <ul>
+                                <li><a href="#general"><i class="fas fa-sliders-h"></i> General</a></li>
+                                <li><a href="#security"><i class="fas fa-shield-alt"></i> Security</a></li>
+                                <li><a href="#notifications"><i class="fas fa-bell"></i> Notifications</a></li>
+                            </ul>
+                        </details>
+                    </li>
+
+                    <!-- Divider -->
+                    <li class="menu-title"><span>Support</span></li>
+                    
+                    <!-- Support Items -->
+                    <li><a href="#help"><i class="fas fa-question-circle"></i> Help Center</a></li>
+                    <li><a href="#documentation"><i class="fas fa-book"></i> Documentation</a></li>
+                    <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-base-300">
+                <button class="btn btn-sm btn-ghost w-full justify-start">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64 min-h-screen">
+        <!-- Navbar -->
+        <nav class="navbar bg-base-100 shadow-md sticky top-0 z-30">
+            <div class="flex-1">
+                <h1 class="text-xl font-semibold ml-16 lg:ml-4">Welcome to Dashboard</h1>
+            </div>
+            <div class="flex-none gap-2">
+                <!-- Search -->
+                <div class="form-control hidden md:block">
+                    <input type="text" placeholder="Search" class="input input-bordered input-sm w-40 lg:w-64" />
+                </div>
+                
+                <!-- Theme Toggle -->
+                <button class="btn btn-ghost btn-circle" onclick="toggleTheme()">
+                    <i class="fas fa-moon text-lg"></i>
+                </button>
+                
+                <!-- Notifications -->
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                        <div class="indicator">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="badge badge-xs badge-primary indicator-item">3</span>
+                        </div>
+                    </div>
+                    <div tabindex="0" class="card compact dropdown-content z-[1] shadow-xl bg-base-100 rounded-box w-64">
+                        <div class="card-body">
+                            <h3 class="font-bold">Notifications</h3>
+                            <div class="divider my-0"></div>
+                            <ul class="menu menu-sm">
+                                <li><a>New message from John</a></li>
+                                <li><a>Your report is ready</a></li>
+                                <li><a>Meeting in 30 minutes</a></li>
+                            </ul>
+                            <div class="card-actions">
+                                <a href="#" class="link link-primary text-sm">View all notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile -->
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                        <div class="w-10 rounded-full">
+                            <img alt="User avatar" src="/api/placeholder/100/100" />
+                        </div>
+                    </div>
+                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-52">
+                        <li class="menu-title">
+                            <span>John Doe</span>
+                            <span class="text-xs font-normal">john@example.com</span>
+                        </li>
+                        <li><a><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a><i class="fas fa-cog"></i> Settings</a></li>
+                        <li><a><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <main class="p-4 lg:p-8">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+                <div class="stats shadow">
+                    <div class="stat">
+                        <div class="stat-figure text-primary">
+                            <i class="fas fa-users text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Total Users</div>
+                        <div class="stat-value text-primary">25.6K</div>
+                        <div class="stat-desc">21% more than last month</div>
+                    </div>
+                </div>
+
+                <div class="stats shadow">
+                    <div class="stat">
+                        <div class="stat-figure text-secondary">
+                            <i class="fas fa-chart-line text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Page Views</div>
+                        <div class="stat-value text-secondary">2.6M</div>
+                        <div class="stat-desc">14% more than last month</div>
+                    </div>
+                </div>
+
+                <div class="stats shadow">
+                    <div class="stat">
+                        <div class="stat-figure text-accent">
+                            <i class="fas fa-tasks text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Tasks Done</div>
+                        <div class="stat-value text-accent">86%</div>
+                        <div class="stat-desc">Tasks completed this week</div>
+                    </div>
+                </div>
+
+                <div class="stats shadow">
+                    <div class="stat">
+                        <div class="stat-figure text-info">
+                            <i class="fas fa-dollar-sign text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Revenue</div>
+                        <div class="stat-value text-info">$89,400</div>
+                        <div class="stat-desc">12% more than last month</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Recent Activity -->
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body">
+                        <h2 class="card-title">Recent Activity</h2>
+                        <div class="divider my-0"></div>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3">
+                                <div class="avatar">
+                                    <div class="w-10 rounded-full">
+                                        <img src="/api/placeholder/100/100" alt="User" />
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">Sarah Johnson</p>
+                                    <p class="text-sm text-base-content/70">Updated project documentation</p>
+                                </div>
+                                <span class="text-sm text-base-content/70">2 min ago</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <div class="avatar">
+                                    <div class="w-10 rounded-full">
+                                        <img src="/api/placeholder/100/100" alt="User" />
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">Mike Chen</p>
+                                    <p class="text-sm text-base-content/70">Completed task #1234</p>
+                                </div>
+                                <span class="text-sm text-base-content/70">15 min ago</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <div class="avatar">
+                                    <div class="w-10 rounded-full">
+                                        <img src="/api/placeholder/100/100" alt="User" />
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">Emily Davis</p>
+                                    <p class="text-sm text-base-content/70">Added 3 new team members</p>
+                                </div>
+                                <span class="text-sm text-base-content/70">1 hour ago</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body">
+                        <h2 class="card-title">Quick Actions</h2>
+                        <div class="divider my-0"></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                New Project
+                            </button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-user-plus"></i>
+                                Add User
+                            </button>
+                            <button class="btn btn-accent">
+                                <i class="fas fa-file-export"></i>
+                                Export Data
+                            </button>
+                            <button class="btn btn-info">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleSidebar);
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking on a link (mobile)
+        const sidebarLinks = sidebar.querySelectorAll('a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Theme toggle
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            
+            // Update moon/sun icon
+            const themeIcon = document.querySelector('.fa-moon, .fa-sun');
+            if (newTheme === 'dark') {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.contains(e.target)) {
+                    const content = dropdown.querySelector('[tabindex="0"]');
+                    if (content) {
+                        content.blur();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
